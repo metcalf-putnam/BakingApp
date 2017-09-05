@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">BakingApp</string>
+    <string name="title_recipestep_detail">RecipeStep Detail</string>
+
+
+    <string name="error_parse_ingredient">Unable to parse JSON ingredient</string>
+    <string name="error_parse_step">Unable to parse JSON step</string>
+    <string name="error_parse_recipe">Unable to parse JSON Recipe</string>
+    <string name="error_adding_ingredients">Unable to add ingredients</string>
+    <string name="error_adding_steps">Unable to add steps</string>
+    <string name="error_getting_initial_JSON">Unable to make master JSON array of recipes</string>
+</resources>
