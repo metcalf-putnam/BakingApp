@@ -18,7 +18,7 @@ public class JsonParsingTest {
 
     @Test
     public void fileObjectShouldNotBeNull() throws Exception {
-        InputStream in = getClass().getClassLoader().getResourceAsStream("assets/recipes.json");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("recipes.json");
         Assert.assertNotNull(in);
 
     }
