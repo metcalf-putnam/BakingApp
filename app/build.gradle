@@ -29,4 +29,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.+'
     compile 'com.android.support:design:26.+'
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-inline:2.9.0'
+    androidTestCompile "org.mockito:mockito-android:2.9.0"
+    testCompile 'org.json:json:20140107'
 }
