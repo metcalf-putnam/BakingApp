@@ -75,7 +75,7 @@ public final class ParseRecipeJsonUtil {
         return recipe;
     }
 
-    private static Recipe setSteps(Recipe recipe, JSONArray stepsIn){
+    public static Recipe setSteps(Recipe recipe, JSONArray stepsIn){
         try{
             for(int i = 0; i < stepsIn.length(); i++){
                 JSONObject stepObj = stepsIn.getJSONObject(i);
