@@ -11,6 +11,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    repositories {
+        jcenter({url "http://jcenter.bintray.com/"})
+    }
     buildTypes {
         release {
             minifyEnabled false

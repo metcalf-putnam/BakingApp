@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private final OkHttpClient client = new OkHttpClient();
     @BindView(R.id.rv_main_recipe_list) RecyclerView recipeList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

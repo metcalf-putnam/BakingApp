@@ -1,8 +1,14 @@
 <resources>
-    <string name="app_name">BakingApp</string>
+    <string name="app_name">Bake It to Me</string>
     <string name="title_recipestep_detail">RecipeStep Detail</string>
+    <string name="recipe_card_ellipses">...</string>
 
     <string name="preview_recipe_name">Nutella Pie</string>
+    <string name="preview_recipe_ingredient_1">Graham Cracker crumbs</string>
+    <string name="preview_recipe_ingredient_2">Nutella or other chocolate-hazelnut spread</string>
+    <string name="preview_recipe_ingredient_3">vanilla</string>
+    <string name="preview_recipe_ingredient_4">unsalted butter, melted</string>
+    <string name="preview_recipe_ingredient_5">Mascapone Cheese(room temperature)</string>
 
 
     <string name="error_parse_ingredient">Unable to parse JSON ingredient</string>

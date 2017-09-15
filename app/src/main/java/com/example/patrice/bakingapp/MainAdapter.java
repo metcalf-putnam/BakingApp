@@ -11,6 +11,9 @@ import com.example.patrice.bakingapp.model.Recipe;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Tegan on 9/10/2017.
  */
@@ -20,12 +23,25 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
 
     class RecipeViewHolder extends RecyclerView.ViewHolder{
         TextView recipeItemView;
+        TextView ingredient1_View;
+        TextView ingredient2_View;
+        TextView ingredient3_View;
+        TextView ingredient4_View;
+
         public RecipeViewHolder(View itemView) {
             super(itemView);
             recipeItemView = (TextView) itemView.findViewById(R.id.tv_recipe_card_title);
+            ingredient1_View = (TextView) itemView.findViewById(R.id.tv_ingredient1);
+            ingredient2_View = (TextView) itemView.findViewById(R.id.tv_ingredient2);
+            ingredient3_View = (TextView) itemView.findViewById(R.id.tv_ingredient3);
+            ingredient4_View = (TextView) itemView.findViewById(R.id.tv_ingredient4);
         }
         void bind(Recipe recipe){
             recipeItemView.setText(recipe.getName());
+            ingredient1_View.setText(recipe.getIngredients().get(0).getDescription());
+            ingredient2_View.setText(recipe.getIngredients().get(1).getDescription());
+            ingredient3_View.setText(recipe.getIngredients().get(2).getDescription());
+            ingredient4_View.setText(recipe.getIngredients().get(3).getDescription());
         }
     }
 
