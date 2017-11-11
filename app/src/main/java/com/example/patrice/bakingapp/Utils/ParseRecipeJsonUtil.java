@@ -33,9 +33,9 @@ public final class ParseRecipeJsonUtil {
                 recipesArray.add(parseRecipeJsonObject(recipeObj));
             }
         }catch (JSONException e){
-            e.printStackTrace();
-            String error = Resources.getSystem().getString(R.string.error_getting_initial_JSON);
-            Log.d(LOG_TAG, error);
+            throw new RuntimeException(e.getMessage());
+            //String error = Resources.getSystem().getString(R.string.error_getting_initial_JSON);
+            //Log.d(LOG_TAG, error);
         }
         return recipesArray;
     }
@@ -84,9 +84,10 @@ public final class ParseRecipeJsonUtil {
             }
 
         }catch (JSONException e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            String m = e.getMessage();
             String error = Resources.getSystem().getString(R.string.error_adding_steps);
-            Log.d(LOG_TAG, error);
+            Log.d(LOG_TAG, error + " " + m);
         }
 
         return recipe;

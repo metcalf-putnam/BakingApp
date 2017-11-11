@@ -1,6 +1,8 @@
 package com.example.patrice.bakingapp;
 
 import android.app.DownloadManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.support.annotation.RequiresApi;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.patrice.bakingapp.Utils.ParseRecipeJsonUtil;
 import com.example.patrice.bakingapp.model.Recipe;
@@ -26,7 +29,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainAdapter.RecipeClickListener{
     private boolean mTablet;
     private ArrayList<Recipe> mRecipeList;
     private MainAdapter mAdapter;
@@ -55,9 +58,8 @@ public class MainActivity extends AppCompatActivity {
             recipeList.setLayoutManager(gridLayoutManager);
         }
         recipeList.setHasFixedSize(true);
-        mAdapter = new MainAdapter();
+        mAdapter = new MainAdapter(this);
         recipeList.setAdapter(mAdapter);
-
     }
 
 
@@ -88,10 +90,20 @@ public class MainActivity extends AppCompatActivity {
                         //System.out.println(responseBody.string());
                         mRecipeList = ParseRecipeJsonUtil.parseRecipes(responseBody.string());
                         mAdapter.setRecipes(mRecipeList);
-
                     }
                 }
             });
         }
+    }
+
+    @Override
+    public void onRecipeClick(Recipe recipe) {
+        //Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
+        Context context = MainActivity.this;
+        Class destinationActivity = RecipeStepListActivity.class;
+        Intent startDetailActivity = new Intent(context, destinationActivity);
+        startDetailActivity.putExtra("step", recipe.getSteps().get(0));
+        startDetailActivity.putExtra("recipe", recipe);
+        startActivity(startDetailActivity);
     }
 }

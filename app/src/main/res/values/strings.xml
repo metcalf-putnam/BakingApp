@@ -2,6 +2,7 @@
     <string name="app_name">Bake It to Me</string>
     <string name="title_recipestep_detail">RecipeStep Detail</string>
     <string name="recipe_card_ellipses">...</string>
+    <string name="ingredients_label">Ingredients</string>
 
     <string name="preview_recipe_name">Nutella Pie</string>
     <string name="preview_recipe_ingredient_1">Graham Cracker crumbs</string>
@@ -17,5 +18,11 @@
     <string name="error_adding_ingredients">Unable to add ingredients</string>
     <string name="error_adding_steps">Unable to add steps</string>
     <string name="error_getting_initial_JSON">Unable to make master JSON array of recipes</string>
+
+    <string name="preview_step_number">3</string>
+    <string name="preview_step_short_description">Press the crust into baking form.</string>
+    <string name="preview_step_long_description">6. Dump half of flour mixture into chocolate mixture
+        and carefully fold in, just until no streaks remain. Repeat with the rest of the flour mixture.
+        Fold in the chocolate chips.</string>
 
 </resources>

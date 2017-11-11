@@ -73,8 +73,8 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(ingredientList);
-        dest.writeList(stepList);
+        dest.writeTypedList(ingredientList);
+        dest.writeTypedList(stepList);
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeInt(servings);
@@ -93,6 +93,7 @@ public class Recipe implements Parcelable {
     public static final Parcelable.Creator<Recipe> CREATOR
             = new Parcelable.Creator<Recipe>() {
         public Recipe createFromParcel(Parcel in) {
+
             return new Recipe(in);
         }
 

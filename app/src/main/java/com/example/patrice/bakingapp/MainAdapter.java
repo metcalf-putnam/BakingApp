@@ -20,8 +20,13 @@ import butterknife.ButterKnife;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHolder> {
     private ArrayList<Recipe> mRecipeList;
+    final private RecipeClickListener mOnRecipeClick;
+    public interface RecipeClickListener{
+        void onRecipeClick(Recipe recipe);
+    }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder{
+    class RecipeViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener{
         TextView recipeItemView;
         TextView ingredient1_View;
         TextView ingredient2_View;
@@ -30,6 +35,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
 
         public RecipeViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             recipeItemView = (TextView) itemView.findViewById(R.id.tv_recipe_card_title);
             ingredient1_View = (TextView) itemView.findViewById(R.id.tv_ingredient1);
             ingredient2_View = (TextView) itemView.findViewById(R.id.tv_ingredient2);
@@ -43,10 +49,19 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
             ingredient3_View.setText(recipe.getIngredients().get(2).getDescription());
             ingredient4_View.setText(recipe.getIngredients().get(3).getDescription());
         }
+
+        @Override
+        public void onClick(View view) {
+            int clickedPosition = getAdapterPosition();
+            Recipe recipe = mRecipeList.get(clickedPosition);
+            mOnRecipeClick.onRecipeClick(recipe);
+        }
     }
 
-    public MainAdapter(){
+    public MainAdapter(RecipeClickListener clickListener){
+        mOnRecipeClick = clickListener;
     }
+
 
     @Override
     public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -66,7 +81,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
         holder.bind(mRecipeList.get(position));
     }
 
-
     @Override
     public int getItemCount() {
         if(mRecipeList != null){
@@ -76,12 +90,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
     }
 
     public void setRecipes(ArrayList<Recipe> recipes){
-        clearRecipies();
+        clearRecipes();
         mRecipeList = recipes;
         notifyItemRangeInserted(0, recipes.size());
 
     }
-    public void clearRecipies(){
+    public void clearRecipes(){
         if(mRecipeList != null){
             int currentSize =  mRecipeList.size();
             mRecipeList.clear();

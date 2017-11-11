@@ -1,31 +1,22 @@
 package com.example.patrice.bakingapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 
-import com.example.patrice.bakingapp.Utils.ParseRecipeJsonUtil;
 import com.example.patrice.bakingapp.model.Ingredient;
 import com.example.patrice.bakingapp.model.Recipe;
 import com.example.patrice.bakingapp.model.Step;
 
-import junit.framework.Assert;
-
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * An activity representing a list of RecipeSteps. This activity
@@ -35,7 +26,8 @@ import java.util.Scanner;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RecipeStepListActivity extends AppCompatActivity {
+public class RecipeStepListActivity extends AppCompatActivity
+    implements StepListFragment.StepProvider, StepListFragment.OnStepClickListener{
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -43,103 +35,58 @@ public class RecipeStepListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     private List<Step> mStepList = null;
+    private List<Ingredient> mIngredients = null;
+    private StepListAdapter mAdapter;
+
+    @Override
+    public List<Step> getSteps() {
+        return mStepList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intentThatStartedThisActivity = getIntent();
+
+        if(intentThatStartedThisActivity != null){
+            if(intentThatStartedThisActivity.hasExtra("recipe")){
+                Recipe recipe = intentThatStartedThisActivity.getParcelableExtra("recipe");
+                mStepList = recipe.getSteps();
+            }
+
+        }
         setContentView(R.layout.activity_recipestep_list);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
-
-        View recyclerView = findViewById(R.id.recipestep_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-
-
         if (findViewById(R.id.recipestep_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
+            //recipestep_detail_container is only present in tablet devices
             mTwoPane = true;
+            if(savedInstanceState == null){
+                UpdateStep(mStepList.get(0), true);
+            }
+        }
+        else{
+            mTwoPane = false;
         }
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mStepList));
+    private void UpdateStep(Step step, boolean firstTime){
+        RecipeStepDetailFragment detailFragment = new RecipeStepDetailFragment();
+        detailFragment.SetStepDetails(step);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(firstTime){
+            fragmentManager.beginTransaction()
+                    .add(R.id.recipestep_detail_container, detailFragment)
+                    .commit();
+        }
+        else{
+            fragmentManager.beginTransaction()
+                    .replace(R.id.recipestep_detail_container, detailFragment)
+                    .commit();
+        }
+
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private List<Step> mStepList = null;
-
-        public SimpleItemRecyclerViewAdapter(List<Step> stepList) {
-            mStepList = stepList;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recipestep_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mStepList.get(position);
-            holder.mIdView.setText(mStepList.get(position).getShortDescription());
-            holder.mContentView.setText(mStepList.get(position).getVideoUrl());
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putInt(RecipeStepDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
-                        RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.recipestep_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, RecipeStepDetailActivity.class);
-                        intent.putExtra(RecipeStepDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
-
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            if(mStepList != null){
-                return mStepList.size();
-            }
-            return 0;
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public Step mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) findViewById(R.id.id);
-                mContentView = (TextView) findViewById(R.id.content);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
-        }
+    @Override
+    public void OnStepSelected(Step step) {
+        UpdateStep(step, false);
     }
 }
