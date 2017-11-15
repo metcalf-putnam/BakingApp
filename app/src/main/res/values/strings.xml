@@ -3,6 +3,9 @@
     <string name="title_recipestep_detail">RecipeStep Detail</string>
     <string name="recipe_card_ellipses">...</string>
     <string name="ingredients_label">Ingredients</string>
+    <string name="button_previous">Previous</string>
+    <string name="button_next">Next</string>
+    <string name="button_back">Back</string>
 
     <string name="preview_recipe_name">Nutella Pie</string>
     <string name="preview_recipe_ingredient_1">Graham Cracker crumbs</string>
@@ -11,6 +14,8 @@
     <string name="preview_recipe_ingredient_4">unsalted butter, melted</string>
     <string name="preview_recipe_ingredient_5">Mascapone Cheese(room temperature)</string>
 
+    <string name="preview_ingredient_quantity">700</string>
+
 
     <string name="error_parse_ingredient">Unable to parse JSON ingredient</string>
     <string name="error_parse_step">Unable to parse JSON step</string>
@@ -18,11 +23,15 @@
     <string name="error_adding_ingredients">Unable to add ingredients</string>
     <string name="error_adding_steps">Unable to add steps</string>
     <string name="error_getting_initial_JSON">Unable to make master JSON array of recipes</string>
+    <string name="error_loading">Unable to load recipes</string>
+    <string name="error_no_internet">No internet :(</string>
 
     <string name="preview_step_number">3</string>
     <string name="preview_step_short_description">Press the crust into baking form.</string>
     <string name="preview_step_long_description">6. Dump half of flour mixture into chocolate mixture
         and carefully fold in, just until no streaks remain. Repeat with the rest of the flour mixture.
         Fold in the chocolate chips.</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

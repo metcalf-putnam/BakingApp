@@ -37,10 +37,12 @@
             android:textSize="36sp"
             android:textStyle="bold"
             android:visibility="visible"
+            android:id="@+id/tv_ingredients_label"
             app:layout_constraintBottom_toBottomOf="@+id/iv_spice_photo"
             app:layout_constraintLeft_toLeftOf="@+id/iv_spice_photo"
             app:layout_constraintRight_toRightOf="@+id/iv_spice_photo"
             app:layout_constraintTop_toTopOf="@+id/iv_spice_photo" />
+
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.RecyclerView

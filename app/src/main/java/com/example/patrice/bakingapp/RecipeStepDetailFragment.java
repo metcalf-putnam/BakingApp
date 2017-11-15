@@ -8,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.patrice.bakingapp.model.Step;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -24,8 +26,10 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  * A fragment representing a single RecipeStep detail screen.
@@ -42,12 +46,12 @@ public class RecipeStepDetailFragment extends Fragment {
     private Step mStep;
     private String mRecipeName;
     private SimpleExoPlayer mExoPlayer;
+    private ImageView mThumbnail;
     private SimpleExoPlayerView mPlayerView;
 
     /**
      * The model content this fragment is presenting.
      */
-    //private Recipe.DummyItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -57,17 +61,16 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-            Activity activity = this.getActivity();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(savedInstanceState != null){
+            mStep = savedInstanceState.getParcelable("step");
+        }
         View rootView = inflater.inflate(R.layout.fragment_recipe_step_detail, container, false);
 
         mPlayerView = rootView.findViewById(R.id.playerView);
+        mThumbnail = rootView.findViewById(R.id.iv_step_thumnail);
+
 
         TextView tv_description = rootView.findViewById(R.id.tv_step_description);
         tv_description.setText(mStep.getDescription());
@@ -77,6 +80,10 @@ public class RecipeStepDetailFragment extends Fragment {
         Uri media = GrabVideoUri(mStep);
         if(media != null){
             initializePlayer(media);
+            mPlayerView.setVisibility(View.VISIBLE);
+        }else{
+            mPlayerView.setVisibility(View.GONE);
+            String thumbnailUrl = mStep.getThumbnailUrl();
         }
 
         return rootView;
@@ -119,9 +126,23 @@ public class RecipeStepDetailFragment extends Fragment {
         releasePlayer();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
     private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if(mExoPlayer != null){
+            mExoPlayer.setPlayWhenReady(false);
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("step", mStep);
     }
 }

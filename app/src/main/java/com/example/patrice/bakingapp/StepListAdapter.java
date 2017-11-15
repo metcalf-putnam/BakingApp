@@ -66,8 +66,9 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
         }
         void bind(Step step){
             int id = step.getId();
-            int step_number = id + 1;
-            tv_step_number.setText(""+step_number);
+            if(id != 0){
+                tv_step_number.setText(""+id);
+            }
             tv_short_description.setText(step.getShortDescription());
         }
 

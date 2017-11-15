@@ -1,11 +1,16 @@
 package com.example.patrice.bakingapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -17,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * An activity representing a list of RecipeSteps. This activity
@@ -27,7 +33,8 @@ import butterknife.ButterKnife;
  * item details side-by-side using two vertical panes.
  */
 public class RecipeStepListActivity extends AppCompatActivity
-    implements StepListFragment.StepProvider, StepListFragment.OnStepClickListener{
+    implements StepListFragment.StepProvider, StepListFragment.OnStepClickListener,
+        StepListFragment.OnIngredientsClickListener, IngredientListFragment.IngredientProvider{
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -35,25 +42,24 @@ public class RecipeStepListActivity extends AppCompatActivity
      */
     private boolean mTwoPane;
     private List<Step> mStepList = null;
-    private List<Ingredient> mIngredients = null;
-    private StepListAdapter mAdapter;
-
-    @Override
-    public List<Step> getSteps() {
-        return mStepList;
-    }
+    private Recipe mRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
+
+        if(savedInstanceState != null){
+            mRecipe = savedInstanceState.getParcelable("recipe");
+            mStepList = mRecipe.getSteps();
+        }
+
         Intent intentThatStartedThisActivity = getIntent();
-
-        if(intentThatStartedThisActivity != null){
+        if(savedInstanceState == null && intentThatStartedThisActivity != null){
             if(intentThatStartedThisActivity.hasExtra("recipe")){
-                Recipe recipe = intentThatStartedThisActivity.getParcelableExtra("recipe");
-                mStepList = recipe.getSteps();
+                mRecipe = intentThatStartedThisActivity.getParcelableExtra("recipe");
+                mStepList = mRecipe.getSteps();
             }
-
         }
         setContentView(R.layout.activity_recipestep_list);
         if (findViewById(R.id.recipestep_detail_container) != null) {
@@ -66,6 +72,7 @@ public class RecipeStepListActivity extends AppCompatActivity
         else{
             mTwoPane = false;
         }
+
     }
 
     private void UpdateStep(Step step, boolean firstTime){
@@ -82,11 +89,51 @@ public class RecipeStepListActivity extends AppCompatActivity
                     .replace(R.id.recipestep_detail_container, detailFragment)
                     .commit();
         }
-
     }
 
     @Override
     public void OnStepSelected(Step step) {
-        UpdateStep(step, false);
+        if(mTwoPane){
+            UpdateStep(step, false);
+        }else{
+            Context context = this;
+            Class destinationActivity = RecipeStepDetailActivity.class;
+            Intent stepDetailIntent = new Intent(context, destinationActivity);
+            stepDetailIntent.putExtra("step", step);
+            stepDetailIntent.putExtra("recipe", mRecipe);
+            startActivity(stepDetailIntent);
+        }
+
+    }
+
+
+
+    @Override
+    public void OnIngredientsSelected(View view) {
+        if(mTwoPane){
+            IngredientListFragment ingredientFragment = new IngredientListFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.recipestep_detail_container, ingredientFragment)
+                    .commit();
+        }else{
+            Context context = this;
+            Class destinationActivity = RecipeStepDetailActivity.class;
+            Intent ingredientDetailIntent = new Intent(context, destinationActivity);
+            ingredientDetailIntent.putExtra("recipe", mRecipe);
+            ingredientDetailIntent.putExtra("ingredient", true);
+            startActivity(ingredientDetailIntent);
+        }
+    }
+
+
+    @Override
+    public Recipe getRecipe() {
+        return mRecipe;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("recipe", mRecipe);
     }
 }
