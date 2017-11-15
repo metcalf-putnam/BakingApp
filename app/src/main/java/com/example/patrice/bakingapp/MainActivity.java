@@ -11,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
     private final OkHttpClient client = new OkHttpClient();
     private int WIDGETID;
     @BindView(R.id.rv_main_recipe_list) RecyclerView recipeList;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
 
     @Override
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
     * Modified from https://github.com/square/okhttp/wiki/Recipes (async)
     * */
     public void fetchRecipes() throws Exception {
-
+        progressBar.setVisibility(View.VISIBLE);
         Request request = new Request.Builder()
                 .url("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json")
                 .build();
@@ -101,10 +104,18 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
                         mRecipeList = ParseRecipeJsonUtil.parseRecipes(responseBody.string());
                         mAdapter.setRecipes(mRecipeList);
                     }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
                 }
+
             });
         }
     }
+
 
     @Override
     public void onRecipeClick(Recipe recipe) {
