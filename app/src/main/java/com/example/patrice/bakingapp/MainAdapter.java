@@ -5,9 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.patrice.bakingapp.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -21,12 +23,14 @@ import butterknife.ButterKnife;
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHolder> {
     private ArrayList<Recipe> mRecipeList;
     final private RecipeClickListener mOnRecipeClick;
+    private Context mContext;
     public interface RecipeClickListener{
         void onRecipeClick(Recipe recipe);
     }
 
     class RecipeViewHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener{
+        ImageView recipePhoto;
         TextView recipeItemView;
         TextView ingredient1_View;
         TextView ingredient2_View;
@@ -36,6 +40,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
         public RecipeViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            recipePhoto = (ImageView) itemView.findViewById(R.id.iv_recipe_photo);
             recipeItemView = (TextView) itemView.findViewById(R.id.tv_recipe_card_title);
             ingredient1_View = (TextView) itemView.findViewById(R.id.tv_ingredient1);
             ingredient2_View = (TextView) itemView.findViewById(R.id.tv_ingredient2);
@@ -43,6 +48,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
             ingredient4_View = (TextView) itemView.findViewById(R.id.tv_ingredient4);
         }
         void bind(Recipe recipe){
+            String photoUrl = recipe.getImageUrl();
+            if(!photoUrl.isEmpty()){
+                Picasso.with(mContext)
+                        .load(photoUrl)
+                        .placeholder(R.drawable.cupcake_640)
+                        .error(R.drawable.ic_error)
+                        .into(recipePhoto);
+            }
+
             recipeItemView.setText(recipe.getName());
             ingredient1_View.setText(recipe.getIngredients().get(0).getDescription());
             ingredient2_View.setText(recipe.getIngredients().get(1).getDescription());
@@ -65,9 +79,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
 
     @Override
     public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        mContext = parent.getContext();
         int recipeLayoutId = R.layout.recipe_list_item;
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(recipeLayoutId, parent, shouldAttachToParentImmediately);

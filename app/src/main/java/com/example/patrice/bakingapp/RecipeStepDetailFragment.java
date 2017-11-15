@@ -84,6 +84,17 @@ public class RecipeStepDetailFragment extends Fragment {
         }else{
             mPlayerView.setVisibility(View.GONE);
             String thumbnailUrl = mStep.getThumbnailUrl();
+            if(!thumbnailUrl.isEmpty()){
+                int index = thumbnailUrl.lastIndexOf(".") + 1;
+                String extension = thumbnailUrl.substring(index);
+                if(extension.contentEquals("jpg") || extension.contentEquals("png")){
+                    Picasso.with(getContext())
+                            .load(thumbnailUrl)
+                            .placeholder(R.drawable.cupcake_640)
+                            .error(R.drawable.ic_error)
+                            .into(mThumbnail);
+                }
+            }
         }
 
         return rootView;
@@ -112,7 +123,7 @@ public class RecipeStepDetailFragment extends Fragment {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(activity, trackSelector, loadControl);
             mPlayerView.setPlayer(mExoPlayer);
             // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(activity, "ClassicalMusicQuiz");
+            String userAgent = Util.getUserAgent(activity, "BakeItToMe");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     activity, userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
