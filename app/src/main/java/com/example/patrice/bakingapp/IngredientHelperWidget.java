@@ -18,59 +18,91 @@ import java.util.List;
  * Implementation of App Widget functionality.
  */
 public class IngredientHelperWidget extends AppWidgetProvider {
-    private static Recipe mRecipe;
-    private static List<Ingredient> mIngredients;
-    private static RemoteViews mViews;
-
-    public static void setRecipe(Recipe recipe){
-        mRecipe = recipe;
-        mIngredients = recipe.getIngredients();
-       // updateText(mViews);
-    }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+                                int appWidgetId, Recipe recipe) {
 
         // Construct the RemoteViews object
-        mViews = new RemoteViews(context.getPackageName(), R.layout.ingredient_helper_widget);
-
-        if(mRecipe != null){
-            updateText(mViews);
-        }
-
-        Intent intent = new Intent(context, RecipeStepListActivity.class);
-        intent.putExtra("recipe", mRecipe);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-        mViews.setOnClickPendingIntent(R.id.ll_widget, pendingIntent);
+        RemoteViews views = getRemoteView(context, recipe);
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, mViews);
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
-
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
+    public static void updateWidgets(Context context, AppWidgetManager appWidgetManager,
+                                     Recipe recipe, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, recipe);
         }
     }
 
-    private static void updateText(RemoteViews views){
-        int ingredientsSize = mIngredients.size();
+    private static RemoteViews getRemoteView(Context context, Recipe recipe){
+        Intent intent = new Intent(context, RecipeStepListActivity.class);
+        intent.putExtra("recipe", recipe);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredient_helper_widget);
+
+        views.setOnClickPendingIntent(R.id.ll_widget, pendingIntent);
+        List<Ingredient> ingredients = recipe.getIngredients();
+
+        int ingredientsSize = ingredients.size();
         String ingredientText;
+        views.setTextViewText(R.id.tv_widget_recipe_name, recipe.getName());
+
         if(ingredientsSize > 0){
-            ingredientText = makePrettyString(mIngredients.get(0));
+            ingredientText = makePrettyString(ingredients.get(0));
             views.setTextViewText(R.id.tv_widget_ingredient1, ingredientText);
         }
         if(ingredientsSize > 1){
-            ingredientText = makePrettyString(mIngredients.get(1));
+            ingredientText = makePrettyString(ingredients.get(1));
             views.setTextViewText(R.id.tv_widget_ingredient2, ingredientText);
         }
         if(ingredientsSize > 2){
-            ingredientText = makePrettyString(mIngredients.get(2));
+            ingredientText = makePrettyString(ingredients.get(2));
             views.setTextViewText(R.id.tv_widget_ingredient3, ingredientText);
         }
+        if(ingredientsSize > 3){
+            ingredientText = makePrettyString(ingredients.get(3));
+            views.setTextViewText(R.id.tv_widget_ingredient4, ingredientText);
+        }
+        if(ingredientsSize > 4){
+            ingredientText = makePrettyString(ingredients.get(4));
+            views.setTextViewText(R.id.tv_widget_ingredient5, ingredientText);
+        }
+        if(ingredientsSize > 5){
+            ingredientText = makePrettyString(ingredients.get(5));
+            views.setTextViewText(R.id.tv_widget_ingredient6, ingredientText);
+        }
+        if(ingredientsSize > 6){
+            ingredientText = makePrettyString(ingredients.get(6));
+            views.setTextViewText(R.id.tv_widget_ingredient7, ingredientText);
+        }
+        if(ingredientsSize > 7){
+            ingredientText = makePrettyString(ingredients.get(7));
+            views.setTextViewText(R.id.tv_widget_ingredient8, ingredientText);
+        }
+        if(ingredientsSize > 8){
+            ingredientText = makePrettyString(ingredients.get(8));
+            views.setTextViewText(R.id.tv_widget_ingredient9, ingredientText);
+        }
+        if(ingredientsSize > 9){
+            ingredientText = makePrettyString(ingredients.get(9));
+            views.setTextViewText(R.id.tv_widget_ingredient10, ingredientText);
+        }
+        if(ingredientsSize > 10){
+            ingredientText = makePrettyString(ingredients.get(10));
+            views.setTextViewText(R.id.tv_widget_ingredient11, ingredientText);
+        }
+        if(ingredientsSize > 11){
+            ingredientText = makePrettyString(ingredients.get(11));
+            views.setTextViewText(R.id.tv_widget_ingredient12, ingredientText);
+        }
+        if(ingredientsSize > 12){
+            ingredientText = makePrettyString(ingredients.get(12));
+            views.setTextViewText(R.id.tv_widget_ingredient13, ingredientText);
+        }
+        return views;
     }
 
     private static String makePrettyString(Ingredient ingredient){
@@ -88,6 +120,20 @@ public class IngredientHelperWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
+        if(intent != null && intent.hasExtra("recipe") && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)){
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            int[] ids = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+            Recipe recipe = intent.getParcelableExtra("recipe");
+            updateWidgets(context, manager, recipe, ids);
+        }
+
+
     }
 }
 

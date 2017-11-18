@@ -2,6 +2,7 @@ package com.example.patrice.bakingapp;
 
 import android.app.DownloadManager;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -18,6 +19,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.example.patrice.bakingapp.Utils.ParseRecipeJsonUtil;
+import com.example.patrice.bakingapp.model.Ingredient;
 import com.example.patrice.bakingapp.model.Recipe;
 
 import java.io.IOException;
@@ -120,11 +122,20 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
     @Override
     public void onRecipeClick(Recipe recipe) {
         //Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
-        IngredientHelperWidget.setRecipe(recipe);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        RemoteViews views = new RemoteViews(this.getPackageName(),
-                R.layout.ingredient_helper_widget);
-        appWidgetManager.updateAppWidget(WIDGETID, views);
+
+        //Updating widget, borrowing from code here:
+        // https://stackoverflow.com/questions/3455123/programmatically-update-widget-from-activity-service-receiver
+        Intent intent = new Intent(this, IngredientHelperWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+// Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+// since it seems the onUpdate() is only fired on that:
+        int[] ids = AppWidgetManager.getInstance(getApplication())
+                .getAppWidgetIds(new ComponentName(getApplication(), IngredientHelperWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        intent.putExtra("recipe", recipe);
+        sendBroadcast(intent);
+
+
         Context context = MainActivity.this;
         Class destinationActivity = RecipeStepListActivity.class;
         Intent startDetailActivity = new Intent(context, destinationActivity);
