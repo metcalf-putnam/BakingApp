@@ -2,7 +2,6 @@ package com.example.patrice.bakingapp;
 
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
-
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
@@ -38,16 +37,14 @@ public class EspressoTests {
     private static final String DETAIL_INGREDIENT = "salt";
     private static final String STEP_DESCRIPTION1 = "1. Preheat the oven";
     private static final String STEP_DESCRIPTION2 = "6. Pour the filling";
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityTestRule =
+            new ActivityTestRule<>(MainActivity.class);
+    private IdlingResource mIdlingResource;
 
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
     }
-
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule =
-            new ActivityTestRule<>(MainActivity.class);
-
-    private IdlingResource mIdlingResource;
 
     @Before
     public void registerIdlingResource() {
@@ -57,7 +54,7 @@ public class EspressoTests {
     }
 
     @Test
-    public void idlingTest(){
+    public void idlingTest() {
         dataLoadingTest();
         stepListLoadingTest();
         detailLoadingTest_video();
@@ -66,20 +63,21 @@ public class EspressoTests {
         loadIngredients();
         navigateUpFromSteps();
     }
-    public void dataLoadingTest(){
+
+    public void dataLoadingTest() {
         onView(ViewMatchers.withId(R.id.rv_main_recipe_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0,
                         click()));
     }
 
-    public void stepListLoadingTest(){
+    public void stepListLoadingTest() {
         onView(withId(R.id.tv_ingredients_label)).check(matches(withText(INGREDIENTS_LABEL)));
 
         onView(withRecyclerView(R.id.rv_recipestep_list).atPosition(3))
                 .check(matches(hasDescendant(withText(STEP_3))));
     }
 
-    public void detailLoadingTest_video(){
+    public void detailLoadingTest_video() {
         onView(ViewMatchers.withId(R.id.rv_recipestep_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(4,
                         click()));
@@ -87,7 +85,7 @@ public class EspressoTests {
         onView(withContentDescription("Navigate up")).perform(click());
     }
 
-    public void detailLoadingTest_noVideo(){
+    public void detailLoadingTest_noVideo() {
         onView(ViewMatchers.withId(R.id.rv_recipestep_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(5,
                         click()));
@@ -95,7 +93,7 @@ public class EspressoTests {
         onView(withContentDescription("Navigate up")).perform(click());
     }
 
-    public void loadIngredients(){
+    public void loadIngredients() {
         onView(withId(R.id.iv_spice_photo))
                 .perform(click());
         onView(withRecyclerView(R.id.rv_ingredient_list).atPosition(3))
@@ -103,7 +101,7 @@ public class EspressoTests {
         onView(withContentDescription("Navigate up")).perform(click());
     }
 
-    public void detailStepNavigation(){
+    public void detailStepNavigation() {
         onView(ViewMatchers.withId(R.id.rv_recipestep_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0,
                         click()));
@@ -128,7 +126,7 @@ public class EspressoTests {
         onView(withContentDescription("Navigate up")).perform(click());
     }
 
-    public void navigateUpFromSteps(){
+    public void navigateUpFromSteps() {
         onView(withContentDescription("Navigate up")).perform(click());
     }
 

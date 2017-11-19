@@ -7,13 +7,29 @@ import android.os.Parcelable;
  * Created by Patrice on 9/4/2017.
  */
 
-public class Ingredient implements Parcelable{
+public class Ingredient implements Parcelable {
+    public static final Parcelable.Creator<Ingredient> CREATOR
+            = new Parcelable.Creator<Ingredient>() {
+        public Ingredient createFromParcel(Parcel in) {
+            return new Ingredient(in);
+        }
+
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
     private double quantity;
     private String measure;
     private String description;
 
-    public Ingredient(){
+    public Ingredient() {
         //ParseRecipeJsonUtil creates new ingredients from JSON
+    }
+
+    private Ingredient(Parcel in) {
+        quantity = in.readDouble();
+        measure = in.readString();
+        description = in.readString();
     }
 
     public Double getQuantity() {
@@ -51,21 +67,5 @@ public class Ingredient implements Parcelable{
         dest.writeString(measure);
         dest.writeString(description);
     }
-
-    private Ingredient(Parcel in) {
-        quantity = in.readDouble();
-        measure = in.readString();
-        description = in.readString();
-    }
-    public static final Parcelable.Creator<Ingredient> CREATOR
-            = new Parcelable.Creator<Ingredient>() {
-        public Ingredient createFromParcel(Parcel in) {
-            return new Ingredient(in);
-        }
-
-        public Ingredient[] newArray(int size) {
-            return new Ingredient[size];
-        }
-    };
 
 }

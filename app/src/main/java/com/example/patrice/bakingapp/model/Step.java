@@ -7,16 +7,35 @@ import android.os.Parcelable;
  * Created by Patrice on 9/4/2017.
  */
 
-public class Step implements Parcelable{
+public class Step implements Parcelable {
+    public static final Parcelable.Creator<Step> CREATOR
+            = new Parcelable.Creator<Step>() {
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
+
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
     private int id;
     private String shortDescription;
     private String videoUrl;
     private String thumbnailUrl;
     private String description;
 
-    public Step(){
+    public Step() {
         //ParseRecipeJsonUtil builds new steps from json
     }
+
+    private Step(Parcel in) {
+        id = in.readInt();
+        shortDescription = in.readString();
+        description = in.readString();
+        videoUrl = in.readString();
+        thumbnailUrl = in.readString();
+    }
+
     public int getId() {
         return id;
     }
@@ -70,22 +89,4 @@ public class Step implements Parcelable{
         dest.writeString(videoUrl);
         dest.writeString(thumbnailUrl);
     }
-
-    private Step(Parcel in){
-        id = in.readInt();
-        shortDescription = in.readString();
-        description = in.readString();
-        videoUrl = in.readString();
-        thumbnailUrl = in.readString();
-    }
-    public static final Parcelable.Creator<Step> CREATOR
-            = new Parcelable.Creator<Step>() {
-        public Step createFromParcel(Parcel in) {
-            return new Step(in);
-        }
-
-        public Step[] newArray(int size) {
-            return new Step[size];
-        }
-    };
 }

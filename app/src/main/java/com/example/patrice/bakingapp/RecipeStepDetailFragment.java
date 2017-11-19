@@ -62,11 +62,11 @@ public class RecipeStepDetailFragment extends Fragment {
 
         //setRetainInstance(true);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mStep = savedInstanceState.getParcelable("step");
             mPosition = savedInstanceState.getLong("position");
         }
-        if(mPosition == null) mPosition = C.TIME_UNSET;
+        if (mPosition == null) mPosition = C.TIME_UNSET;
     }
 
     @Override
@@ -81,20 +81,20 @@ public class RecipeStepDetailFragment extends Fragment {
 
         TextView tv_description = rootView.findViewById(R.id.tv_step_description);
         tv_description.setText(mStep.getDescription());
-        if(mExoPlayer != null){
+        if (mExoPlayer != null) {
             releasePlayer();
         }
         mUri = GrabVideoUri(mStep);
-        if(mUri != null){
+        if (mUri != null) {
             initializePlayer();
             mPlayerView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mPlayerView.setVisibility(View.GONE);
             String thumbnailUrl = mStep.getThumbnailUrl();
-            if(!thumbnailUrl.isEmpty()){
+            if (!thumbnailUrl.isEmpty()) {
                 int index = thumbnailUrl.lastIndexOf(".") + 1;
                 String extension = thumbnailUrl.substring(index);
-                if(extension.contentEquals("jpg") || extension.contentEquals("png")){
+                if (extension.contentEquals("jpg") || extension.contentEquals("png")) {
                     Picasso.with(getContext())
                             .load(thumbnailUrl)
                             .placeholder(R.drawable.cupcake_640)
@@ -107,16 +107,16 @@ public class RecipeStepDetailFragment extends Fragment {
         return rootView;
     }
 
-    private Uri GrabVideoUri(Step step){
+    private Uri GrabVideoUri(Step step) {
         String videoUrl = step.getVideoUrl();
-        if(videoUrl.isEmpty()){
+        if (videoUrl.isEmpty()) {
             return null;
         }
         Uri videoUri = Uri.parse(videoUrl);
         return videoUri;
     }
 
-    public void SetStepDetails(Step step){
+    public void SetStepDetails(Step step) {
         mStep = step;
     }
 
@@ -152,18 +152,19 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
     private void releasePlayer() {
-        if(mExoPlayer != null){
+        if (mExoPlayer != null) {
             mExoPlayer.setPlayWhenReady(false);
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
         }
     }
-//https://stackoverflow.com/questions/45481775/exoplayer-restore-state-when-resumed/45482017#45482017
+
+    //https://stackoverflow.com/questions/45481775/exoplayer-restore-state-when-resumed/45482017#45482017
     @Override
     public void onPause() {
         super.onPause();
-        if(mExoPlayer != null){
+        if (mExoPlayer != null) {
             mPosition = mExoPlayer.getContentPosition();
             releasePlayer();
         }
@@ -172,7 +173,7 @@ public class RecipeStepDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(mUri != null){
+        if (mUri != null) {
             initializePlayer();
         }
     }

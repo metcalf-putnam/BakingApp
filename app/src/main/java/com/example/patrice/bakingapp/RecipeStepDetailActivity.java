@@ -1,17 +1,15 @@
 package com.example.patrice.bakingapp;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.patrice.bakingapp.model.Recipe;
 import com.example.patrice.bakingapp.model.Step;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 
 import java.util.List;
 
@@ -26,15 +24,17 @@ import butterknife.OnClick;
  * in a {@link RecipeStepListActivity}.
  */
 public class RecipeStepDetailActivity extends AppCompatActivity
-    implements IngredientListFragment.IngredientProvider{
+        implements IngredientListFragment.IngredientProvider {
+    @BindView(R.id.button_next)
+    Button button_next;
+    @BindView(R.id.button_previous)
+    Button button_previous;
     private Step mStep;
     private Recipe mRecipe;
     private boolean mIngredientView;
     private int mStepNumber;
     private int mTotalSteps;
     private List<Step> mStepList;
-    @BindView(R.id.button_next) Button button_next;
-    @BindView(R.id.button_previous) Button button_previous;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_recipestep_detail);
         ButterKnife.bind(this);
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable("recipe");
             mStepNumber = savedInstanceState.getInt("step_num");
             mIngredientView = savedInstanceState.getBoolean("ingredient_view");
@@ -50,7 +50,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity
             mTotalSteps = mStepList.size();
             mStep = mStepList.get(mStepNumber);
 
-        }else {
+        } else {
             Intent intentThatStartedThisActivity = getIntent();
             if (intentThatStartedThisActivity != null) {
                 if (intentThatStartedThisActivity.hasExtra("recipe")) {
@@ -79,25 +79,24 @@ public class RecipeStepDetailActivity extends AppCompatActivity
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-        if(savedInstanceState == null && mIngredientView){
+        if (savedInstanceState == null && mIngredientView) {
             InitializeIngredients();
-        }
-        else if (savedInstanceState == null && !mIngredientView) {
+        } else if (savedInstanceState == null && !mIngredientView) {
             InitializeStep();
         }
     }
 
-    private void UpdateStep(Step step){
+    private void UpdateStep(Step step) {
         RecipeStepDetailFragment detailFragment = new RecipeStepDetailFragment();
         detailFragment.SetStepDetails(step);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-            fragmentManager.beginTransaction()
-                    .replace(R.id.recipestep_detail_container, detailFragment)
-                    .commit();
+        fragmentManager.beginTransaction()
+                .replace(R.id.recipestep_detail_container, detailFragment)
+                .commit();
     }
 
-    private void InitializeIngredients(){
+    private void InitializeIngredients() {
         IngredientListFragment ingredientFragment = new IngredientListFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -105,7 +104,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity
                 .commit();
     }
 
-    private void InitializeStep(){
+    private void InitializeStep() {
         RecipeStepDetailFragment detailFragment = new RecipeStepDetailFragment();
         detailFragment.SetStepDetails(mStep);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -115,19 +114,19 @@ public class RecipeStepDetailActivity extends AppCompatActivity
     }
 
 
-    private void CheckButtonVisibility(){
-        if(!mIngredientView){
-            if(mStepNumber == (mTotalSteps-1)){
+    private void CheckButtonVisibility() {
+        if (!mIngredientView) {
+            if (mStepNumber == (mTotalSteps - 1)) {
                 button_next.setVisibility(View.GONE);
                 button_previous.setVisibility(View.VISIBLE);
-            }else if(mStepNumber == 0){
+            } else if (mStepNumber == 0) {
                 button_previous.setVisibility(View.GONE);
                 button_next.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 button_next.setVisibility(View.VISIBLE);
                 button_previous.setVisibility(View.VISIBLE);
             }
-        }else{
+        } else {
             button_next.setVisibility(View.GONE);
             button_previous.setVisibility(View.VISIBLE);
         }
@@ -135,7 +134,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.button_next)
-    public void clickNext(View view){
+    public void clickNext(View view) {
         mStepNumber++;
         mStep = mStepList.get(mStepNumber);
         UpdateStep(mStep);
@@ -143,14 +142,13 @@ public class RecipeStepDetailActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.button_previous)
-    public void clickPrevious(View view){
-        if(!mIngredientView){
+    public void clickPrevious(View view) {
+        if (!mIngredientView) {
             mStepNumber--;
             mStep = mStepList.get(mStepNumber);
             UpdateStep(mStep);
             CheckButtonVisibility();
-        }
-        else{
+        } else {
             Context context = this;
             Class destinationActivity = RecipeStepListActivity.class;
             Intent startDetailActivity = new Intent(context, destinationActivity);
@@ -173,10 +171,10 @@ public class RecipeStepDetailActivity extends AppCompatActivity
         return mRecipe;
     }
 
-/**
- * Code below adapted from:
- * https://developer.android.com/training/implementing-navigation/ancestral.html
- */
+    /**
+     * Code below adapted from:
+     * https://developer.android.com/training/implementing-navigation/ancestral.html
+     */
 
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
@@ -191,7 +189,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity
     @Override
     public Intent getParentActivityIntent() {
         Intent intent = super.getParentActivityIntent();
-        if(mRecipe != null){
+        if (mRecipe != null) {
             intent.putExtra("recipe", mRecipe);
         }
         return intent;

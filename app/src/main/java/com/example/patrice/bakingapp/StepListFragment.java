@@ -23,39 +23,22 @@ import java.util.List;
 
 
 public class StepListFragment extends Fragment
-    implements StepListAdapter.StepClickListener{
+        implements StepListAdapter.StepClickListener {
 
     private OnStepClickListener mCallback;
     private OnIngredientsClickListener mIngredientClickCallback;
     private Recipe mRecipe;
     private Parcelable mListState;
     private LinearLayoutManager mLayoutManager;
-
-    public interface StepProvider {
-        Recipe getRecipe();
-    }
-    public interface OnStepClickListener {
-        void OnStepSelected(Step step);
-    }
-    public interface OnIngredientsClickListener{
-        void OnIngredientsSelected(View view);
-    }
-
-    private class ImageClickListener implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            mIngredientClickCallback.OnIngredientsSelected(v);
-        }
-    }
     private List<Step> steps;
 
-    public StepListFragment(){
+    public StepListFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable("recipe");
             steps = mRecipe.getSteps();
             mListState = savedInstanceState.getParcelable("state");
@@ -64,11 +47,11 @@ public class StepListFragment extends Fragment
         final View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
         RecyclerView rv_step_list = rootView.findViewById(R.id.rv_recipestep_list);
 
-        if(rv_step_list.getLayoutManager() == null){
+        if (rv_step_list.getLayoutManager() == null) {
             mLayoutManager = new LinearLayoutManager(getActivity());
             rv_step_list.setLayoutManager(mLayoutManager);
         }
-        if(mListState != null){
+        if (mListState != null) {
             mLayoutManager.onRestoreInstanceState(mListState);
         }
         StepListAdapter adapter = new StepListAdapter(this);
@@ -90,7 +73,7 @@ public class StepListFragment extends Fragment
             mIngredientClickCallback = (OnIngredientsClickListener) context;
             mRecipe = ((StepProvider) context).getRecipe();
             steps = mRecipe.getSteps();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -117,8 +100,27 @@ public class StepListFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        if(mListState != null){
+        if (mListState != null) {
             mLayoutManager.onRestoreInstanceState(mListState);
+        }
+    }
+
+    public interface StepProvider {
+        Recipe getRecipe();
+    }
+
+    public interface OnStepClickListener {
+        void OnStepSelected(Step step);
+    }
+
+    public interface OnIngredientsClickListener {
+        void OnIngredientsSelected(View view);
+    }
+
+    private class ImageClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            mIngredientClickCallback.OnIngredientsSelected(v);
         }
     }
 }

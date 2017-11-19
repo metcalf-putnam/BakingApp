@@ -1,6 +1,8 @@
 package com.example.patrice.bakingapp.model;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,17 +11,37 @@ Recipe model for use in baking app
 Has array lists for ingredients and steps
 */
 public class Recipe implements Parcelable {
+    public static final Parcelable.Creator<Recipe> CREATOR
+            = new Parcelable.Creator<Recipe>() {
+        public Recipe createFromParcel(Parcel in) {
+
+            return new Recipe(in);
+        }
+
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
     private String name;
     private int id;
     private int servings;
     private String imageUrl;
-
     private List<Ingredient> ingredientList = new ArrayList<>();
     private List<Step> stepList = new ArrayList<>();
 
-    public Recipe(){
+    public Recipe() {
         //ParseRecipeJsonUtil builds a new Recipe object
     }
+
+    private Recipe(Parcel in) {
+        in.readTypedList(ingredientList, Ingredient.CREATOR);
+        in.readTypedList(stepList, Step.CREATOR);
+        id = in.readInt();
+        name = in.readString();
+        servings = in.readInt();
+        imageUrl = in.readString();
+    }
+
     public int getId() {
         return id;
     }
@@ -27,6 +49,7 @@ public class Recipe implements Parcelable {
     public void setId(int id) {
         this.id = id;
     }
+
     public List<Ingredient> getIngredients() {
         return ingredientList;
     }
@@ -34,10 +57,12 @@ public class Recipe implements Parcelable {
     public List<Step> getSteps() {
         return stepList;
     }
-    public void addIngredient(Ingredient ingredient){
+
+    public void addIngredient(Ingredient ingredient) {
         this.ingredientList.add(ingredient);
     }
-    public void addStep(Step step){
+
+    public void addStep(Step step) {
         stepList.add(step);
     }
 
@@ -65,7 +90,6 @@ public class Recipe implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -80,25 +104,4 @@ public class Recipe implements Parcelable {
         dest.writeInt(servings);
         dest.writeString(imageUrl);
     }
-
-    private Recipe(Parcel in) {
-        in.readTypedList(ingredientList, Ingredient.CREATOR);
-        in.readTypedList(stepList, Step.CREATOR);
-        id = in.readInt();
-        name = in.readString();
-        servings = in.readInt();
-        imageUrl = in.readString();
-    }
-
-    public static final Parcelable.Creator<Recipe> CREATOR
-            = new Parcelable.Creator<Recipe>() {
-        public Recipe createFromParcel(Parcel in) {
-
-            return new Recipe(in);
-        }
-
-        public Recipe[] newArray(int size) {
-            return new Recipe[size];
-        }
-    };
 }

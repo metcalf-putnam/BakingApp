@@ -22,15 +22,15 @@ public final class ParseRecipeJsonUtil {
     private static final String LOG_TAG = "ParseJson";
 
 
-    public static ArrayList<Recipe> parseRecipes(String response){
+    public static ArrayList<Recipe> parseRecipes(String response) {
         ArrayList<Recipe> recipesArray = new ArrayList<>();
         try {
             JSONArray recipes = new JSONArray(response);
-            for(int i = 0; i < recipes.length(); i++){
+            for (int i = 0; i < recipes.length(); i++) {
                 JSONObject recipeObj = recipes.getJSONObject(i);
                 recipesArray.add(parseRecipeJsonObject(recipeObj));
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             throw new RuntimeException(e.getMessage());
             //String error = Resources.getSystem().getString(R.string.error_getting_initial_JSON);
             //Log.d(LOG_TAG, error);
@@ -38,9 +38,9 @@ public final class ParseRecipeJsonUtil {
         return recipesArray;
     }
 
-    private static Recipe parseRecipeJsonObject(JSONObject in){
+    private static Recipe parseRecipeJsonObject(JSONObject in) {
         Recipe out = new Recipe();
-        try{
+        try {
             out.setId(in.getInt("id"));
             out.setName(in.getString("name"));
             out.setImageUrl(in.getString("image"));
@@ -50,7 +50,7 @@ public final class ParseRecipeJsonUtil {
             JSONArray stepsIn = in.getJSONArray("steps");
             out = setSteps(out, stepsIn);
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             String error = Resources.getSystem().getString(R.string.error_parse_recipe);
             Log.d(LOG_TAG, error);
@@ -58,14 +58,14 @@ public final class ParseRecipeJsonUtil {
         return out;
     }
 
-    private static Recipe setIngredients(Recipe recipe, JSONArray ingredientsIn){
+    private static Recipe setIngredients(Recipe recipe, JSONArray ingredientsIn) {
         try {
             for (int i = 0; i < ingredientsIn.length(); i++) {
                 JSONObject ingredientObj = ingredientsIn.getJSONObject(i);
                 Ingredient ingredientOut = parseIngredientJsonObject(ingredientObj);
                 recipe.addIngredient(ingredientOut);
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             String error = Resources.getSystem().getString(R.string.error_adding_ingredients);
             Log.d(LOG_TAG, error);
@@ -73,15 +73,15 @@ public final class ParseRecipeJsonUtil {
         return recipe;
     }
 
-    private static Recipe setSteps(Recipe recipe, JSONArray stepsIn){
-        try{
-            for(int i = 0; i < stepsIn.length(); i++){
+    private static Recipe setSteps(Recipe recipe, JSONArray stepsIn) {
+        try {
+            for (int i = 0; i < stepsIn.length(); i++) {
                 JSONObject stepObj = stepsIn.getJSONObject(i);
                 Step stepOut = parseStepJsonObject(stepObj);
                 recipe.addStep(stepOut);
             }
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             //e.printStackTrace();
             String m = e.getMessage();
             String error = Resources.getSystem().getString(R.string.error_adding_steps);
@@ -91,15 +91,15 @@ public final class ParseRecipeJsonUtil {
         return recipe;
     }
 
-    private static Step parseStepJsonObject(JSONObject in){
+    private static Step parseStepJsonObject(JSONObject in) {
         Step out = new Step();
-        try{
+        try {
             out.setDescription(in.getString("description"));
             out.setShortDescription(in.getString("shortDescription"));
             out.setId(in.getInt("id"));
             out.setThumbnailUrl(in.getString("thumbnailURL"));
             out.setVideoUrl(in.getString("videoURL"));
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             String error = Resources.getSystem().getString(R.string.error_parse_step);
             Log.d(LOG_TAG, error);
@@ -107,14 +107,14 @@ public final class ParseRecipeJsonUtil {
         return out;
     }
 
-    private static Ingredient parseIngredientJsonObject(JSONObject in){
+    private static Ingredient parseIngredientJsonObject(JSONObject in) {
         Ingredient out = new Ingredient();
         try {
             out.setDescription(in.getString("ingredient"));
             out.setMeasure(in.getString("measure"));
             out.setQuantity(in.getDouble("quantity"));
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             String error = Resources.getSystem().getString(R.string.error_parse_ingredient);
             Log.d(LOG_TAG, error);

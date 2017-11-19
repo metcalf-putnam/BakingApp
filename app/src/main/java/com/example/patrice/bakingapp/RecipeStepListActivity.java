@@ -23,8 +23,8 @@ import butterknife.ButterKnife;
  * item details side-by-side using two vertical panes.
  */
 public class RecipeStepListActivity extends AppCompatActivity
-    implements StepListFragment.StepProvider, StepListFragment.OnStepClickListener,
-        StepListFragment.OnIngredientsClickListener, IngredientListFragment.IngredientProvider{
+        implements StepListFragment.StepProvider, StepListFragment.OnStepClickListener,
+        StepListFragment.OnIngredientsClickListener, IngredientListFragment.IngredientProvider {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -40,15 +40,15 @@ public class RecipeStepListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable("recipe");
             mStepList = mRecipe.getSteps();
             mStep = savedInstanceState.getParcelable("step");
         }
 
         Intent intentThatStartedThisActivity = getIntent();
-        if(savedInstanceState == null && intentThatStartedThisActivity != null){
-            if(intentThatStartedThisActivity.hasExtra("recipe")){
+        if (savedInstanceState == null && intentThatStartedThisActivity != null) {
+            if (intentThatStartedThisActivity.hasExtra("recipe")) {
                 mRecipe = intentThatStartedThisActivity.getParcelableExtra("recipe");
                 mStepList = mRecipe.getSteps();
             }
@@ -57,30 +57,27 @@ public class RecipeStepListActivity extends AppCompatActivity
         if (findViewById(R.id.recipestep_detail_container) != null) {
             //recipestep_detail_container is only present in tablet devices
             mTwoPane = true;
-            if(savedInstanceState == null){
+            if (savedInstanceState == null) {
                 UpdateStep(mStepList.get(0), true);
-            }
-            else{
+            } else {
                 UpdateStep(mStep, false);
             }
-        }
-        else{
+        } else {
             mTwoPane = false;
         }
 
     }
 
-    private void UpdateStep(Step step, boolean firstTime){
+    private void UpdateStep(Step step, boolean firstTime) {
         mStep = step;
         RecipeStepDetailFragment detailFragment = new RecipeStepDetailFragment();
         detailFragment.SetStepDetails(step);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if(firstTime){
+        if (firstTime) {
             fragmentManager.beginTransaction()
                     .add(R.id.recipestep_detail_container, detailFragment)
                     .commit();
-        }
-        else{
+        } else {
             fragmentManager.beginTransaction()
                     .replace(R.id.recipestep_detail_container, detailFragment)
                     .commit();
@@ -89,9 +86,9 @@ public class RecipeStepListActivity extends AppCompatActivity
 
     @Override
     public void OnStepSelected(Step step) {
-        if(mTwoPane){
+        if (mTwoPane) {
             UpdateStep(step, false);
-        }else{
+        } else {
             Context context = this;
             Class destinationActivity = RecipeStepDetailActivity.class;
             Intent stepDetailIntent = new Intent(context, destinationActivity);
@@ -103,16 +100,15 @@ public class RecipeStepListActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public void OnIngredientsSelected(View view) {
-        if(mTwoPane){
+        if (mTwoPane) {
             IngredientListFragment ingredientFragment = new IngredientListFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.recipestep_detail_container, ingredientFragment)
                     .commit();
-        }else{
+        } else {
             Context context = this;
             Class destinationActivity = RecipeStepDetailActivity.class;
             Intent ingredientDetailIntent = new Intent(context, destinationActivity);

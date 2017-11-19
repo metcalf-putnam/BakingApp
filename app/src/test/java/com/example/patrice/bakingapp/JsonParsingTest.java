@@ -29,17 +29,17 @@ public class JsonParsingTest {
         Assert.assertNotNull(json);
         ArrayList<Recipe> recipes;
         recipes = ParseRecipeJsonUtil.parseRecipes(json);
-        Assert.assertEquals(4 , recipes.size());
+        Assert.assertEquals(4, recipes.size());
 
         Recipe tRecipe = recipes.get(3);
-        Assert.assertEquals(4 , tRecipe.getId());
-        Assert.assertEquals("" , tRecipe.getImageUrl());
-        Assert.assertEquals("Cheesecake" , tRecipe.getName());
-        Assert.assertEquals(8 , tRecipe.getServings());
+        Assert.assertEquals(4, tRecipe.getId());
+        Assert.assertEquals("", tRecipe.getImageUrl());
+        Assert.assertEquals("Cheesecake", tRecipe.getName());
+        Assert.assertEquals(8, tRecipe.getServings());
 
         List<Ingredient> ingredients;
         ingredients = tRecipe.getIngredients();
-        Assert.assertEquals(9 , ingredients.size());
+        Assert.assertEquals(9, ingredients.size());
 
 
         Ingredient ingredient = ingredients.get(6);
@@ -48,12 +48,12 @@ public class JsonParsingTest {
         tParcelIng.setDataPosition(0);
         Ingredient tIngredient = Ingredient.CREATOR.createFromParcel(tParcelIng);
 
-        Assert.assertEquals("large whole eggs" , tIngredient.getDescription());
-        Assert.assertEquals("UNIT" , tIngredient.getMeasure());
-        Assert.assertEquals(3.0 , tIngredient.getQuantity());
+        Assert.assertEquals("large whole eggs", tIngredient.getDescription());
+        Assert.assertEquals("UNIT", tIngredient.getMeasure());
+        Assert.assertEquals(3.0, tIngredient.getQuantity());
 
         List<Step> steps = tRecipe.getSteps();
-        Assert.assertEquals(13 , steps.size());
+        Assert.assertEquals(13, steps.size());
         Step step = steps.get(8);
 
         Parcel tParcel = Parcel.obtain();
@@ -61,13 +61,13 @@ public class JsonParsingTest {
         tParcel.setDataPosition(0);
         Step tStep = Step.CREATOR.createFromParcel(tParcel);
 
-        Assert.assertEquals(8 , tStep.getId());
+        Assert.assertEquals(8, tStep.getId());
         String step_8_description = "8. Pour the batter into the cooled cookie crust. Bang the pan on a counter or sturdy table a few times to release air bubbles from the batter.";
-        Assert.assertEquals(step_8_description , tStep.getDescription());
-        Assert.assertEquals("Pour batter in pan." , tStep.getShortDescription());
+        Assert.assertEquals(step_8_description, tStep.getDescription());
+        Assert.assertEquals("Pour batter in pan.", tStep.getShortDescription());
         String step_8_videoUrl = "https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffdb88_6-add-the-batter-to-the-pan-w-the-crumbs-cheesecake/6-add-the-batter-to-the-pan-w-the-crumbs-cheesecake.mp4";
-        Assert.assertEquals(step_8_videoUrl , tStep.getVideoUrl());
-        Assert.assertEquals("" , tStep.getThumbnailUrl());
+        Assert.assertEquals(step_8_videoUrl, tStep.getVideoUrl());
+        Assert.assertEquals("", tStep.getThumbnailUrl());
 
 
     }

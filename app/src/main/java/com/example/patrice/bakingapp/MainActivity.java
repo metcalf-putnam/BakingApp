@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build.VERSION_CODES;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -13,7 +14,6 @@ import android.support.annotation.RequiresApi;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -36,14 +36,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class MainActivity extends AppCompatActivity implements MainAdapter.RecipeClickListener{
+public class MainActivity extends AppCompatActivity implements MainAdapter.RecipeClickListener {
     private static final int DELAY_MILLIS = 1000;
+    private final OkHttpClient client = new OkHttpClient();
+    @BindView(R.id.rv_main_recipe_list)
+    RecyclerView recipeList;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
     private ArrayList<Recipe> mRecipeList;
     private MainAdapter mAdapter;
-    private final OkHttpClient client = new OkHttpClient();
-    @BindView(R.id.rv_main_recipe_list) RecyclerView recipeList;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
-
     @Nullable
     private SimpleIdlingResource mIdlingResource;
 
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
     public IdlingResource getIdlingResource() {
         if (mIdlingResource == null) {
             mIdlingResource = new SimpleIdlingResource();
-           // mIdlingResource.setIdleState(false);
+            // mIdlingResource.setIdleState(false);
         }
         return mIdlingResource;
     }
@@ -67,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
 
         boolean tablet = getResources().getBoolean(R.bool.isTablet);
 
-        if(tablet){
+        if (tablet) {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
             recipeList.setLayoutManager(gridLayoutManager);
-        }else{
+        } else {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
             recipeList.setLayoutManager(gridLayoutManager);
         }
@@ -105,14 +106,17 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
 
         if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
             client.newCall(request).enqueue(new Callback() {
-                @Override public void onFailure(Call call, IOException e) {
+                @Override
+                public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                 }
 
                 @RequiresApi(api = VERSION_CODES.KITKAT)
-                @Override public void onResponse(Call call, Response response) throws IOException {
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
                     try (ResponseBody responseBody = response.body()) {
-                        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                        if (!response.isSuccessful())
+                            throw new IOException("Unexpected code " + response);
 
                         Headers responseHeaders = response.headers();
                         for (int i = 0, size = responseHeaders.size(); i < size; i++) {
@@ -121,16 +125,16 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
                         //System.out.println(responseBody.string());
                         mRecipeList = ParseRecipeJsonUtil.parseRecipes(responseBody.string());
                         mAdapter.setRecipes(mRecipeList);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                        if (mIdlingResource != null) {
-                            mIdlingResource.setIdleState(true);
-                        }
+                            if (mIdlingResource != null) {
+                                mIdlingResource.setIdleState(true);
+                            }
 
                         }
                     }, DELAY_MILLIS);

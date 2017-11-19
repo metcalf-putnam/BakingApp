@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_spice_photo"
-            android:contentDescription="@string/cd_ingredients_backdrop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/cd_ingredients_backdrop"
             android:cropToPadding="false"
             android:scaleType="centerCrop"
             android:src="@drawable/spices"
@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_ingredients_label"
             android:layout_width="344dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -38,7 +39,6 @@
             android:textSize="36sp"
             android:textStyle="bold"
             android:visibility="visible"
-            android:id="@+id/tv_ingredients_label"
             app:layout_constraintBottom_toBottomOf="@+id/iv_spice_photo"
             app:layout_constraintLeft_toLeftOf="@+id/iv_spice_photo"
             app:layout_constraintRight_toRightOf="@+id/iv_spice_photo"
@@ -51,6 +51,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.patrice.bakingapp.RecipeStepListActivity"
-        tools:listitem="@layout/recipestep_list_content"/>
+        tools:listitem="@layout/recipestep_list_content" />
 
 </LinearLayout>

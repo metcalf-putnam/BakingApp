@@ -14,27 +14,11 @@ import java.util.List;
 /**
  * Created by Patrice on 11/12/2017.
  */
-public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder>{
+public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
     private List<Ingredient> mIngredientList;
 
-    class IngredientViewHolder extends RecyclerView.ViewHolder{
-        TextView tv_quantity;
-        TextView tv_name;
-        TextView tv_unit;
-
-        public IngredientViewHolder(View view){
-            super(view);
-            tv_name = view.findViewById(R.id.tv_ingredient_name);
-            tv_quantity = view.findViewById(R.id.tv_quantity);
-            tv_unit = view.findViewById(R.id.tv_unit);
-        }
-        void bind(Ingredient ingredient){
-            tv_name.setText(ingredient.getDescription());
-            tv_unit.setText(ingredient.getMeasure());
-            tv_quantity.setText(ingredient.getQuantity().toString());
-        }
+    public IngredientListAdapter() {
     }
-    public IngredientListAdapter(){}
 
     @Override
     public IngredientListAdapter.IngredientViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,23 +40,43 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
     @Override
     public int getItemCount() {
-        if(mIngredientList != null){
+        if (mIngredientList != null) {
             return mIngredientList.size();
         }
         return 0;
     }
 
-    public void setIngredientList(List<Ingredient> ingredients){
+    public void setIngredientList(List<Ingredient> ingredients) {
         clearRecipes();
         mIngredientList = ingredients;
         notifyItemRangeInserted(0, ingredients.size());
 
     }
-    private void clearRecipes(){
-        if(mIngredientList != null){
-            int currentSize =  mIngredientList.size();
+
+    private void clearRecipes() {
+        if (mIngredientList != null) {
+            int currentSize = mIngredientList.size();
             mIngredientList.clear();
             notifyItemRangeRemoved(0, currentSize);
+        }
+    }
+
+    class IngredientViewHolder extends RecyclerView.ViewHolder {
+        TextView tv_quantity;
+        TextView tv_name;
+        TextView tv_unit;
+
+        public IngredientViewHolder(View view) {
+            super(view);
+            tv_name = view.findViewById(R.id.tv_ingredient_name);
+            tv_quantity = view.findViewById(R.id.tv_quantity);
+            tv_unit = view.findViewById(R.id.tv_unit);
+        }
+
+        void bind(Ingredient ingredient) {
+            tv_name.setText(ingredient.getDescription());
+            tv_unit.setText(ingredient.getMeasure());
+            tv_quantity.setText(ingredient.getQuantity().toString());
         }
     }
 }

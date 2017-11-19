@@ -1,9 +1,9 @@
 package com.example.patrice.bakingapp;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,19 +20,15 @@ import java.util.List;
  */
 
 public class IngredientListFragment extends Fragment {
-    public IngredientListFragment(){}
-
     private List<Ingredient> mIngredients;
     private Recipe mRecipe;
-
-    public interface IngredientProvider {
-        Recipe getRecipe();
+    public IngredientListFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable("recipe");
             mIngredients = mRecipe.getIngredients();
         }
@@ -53,7 +49,7 @@ public class IngredientListFragment extends Fragment {
         try {
             mRecipe = ((IngredientProvider) context).getRecipe();
             mIngredients = mRecipe.getIngredients();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -61,5 +57,9 @@ public class IngredientListFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("recipe", mRecipe);
+    }
+
+    public interface IngredientProvider {
+        Recipe getRecipe();
     }
 }
