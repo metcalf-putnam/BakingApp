@@ -3,6 +3,7 @@ package com.example.patrice.bakingapp;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.patrice.bakingapp.model.Step;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -37,6 +39,8 @@ public class RecipeStepDetailFragment extends Fragment {
      * represents.
      */
     private Step mStep;
+    private Uri mUri;
+    private Long mPosition;
     private SimpleExoPlayer mExoPlayer;
     private ImageView mThumbnail;
     private SimpleExoPlayerView mPlayerView;
@@ -53,11 +57,20 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        if(mPosition == null) mPosition = C.TIME_UNSET;
         if(savedInstanceState != null){
             mStep = savedInstanceState.getParcelable("step");
+            mPosition = savedInstanceState.getLong("position");
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_recipe_step_detail, container, false);
 
         mPlayerView = rootView.findViewById(R.id.playerView);
@@ -69,9 +82,9 @@ public class RecipeStepDetailFragment extends Fragment {
         if(mExoPlayer != null){
             releasePlayer();
         }
-        Uri media = GrabVideoUri(mStep);
-        if(media != null){
-            initializePlayer(media);
+        mUri = GrabVideoUri(mStep);
+        if(mUri != null){
+            initializePlayer();
             mPlayerView.setVisibility(View.VISIBLE);
         }else{
             mPlayerView.setVisibility(View.GONE);
@@ -106,7 +119,7 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
     //Borrowing example ExoPlayer setup from the Classical Music Quiz
-    private void initializePlayer(Uri mediaUri) {
+    private void initializePlayer() {
         if (mExoPlayer == null) {
             Context activity = this.getActivity();
             // Create an instance of the ExoPlayer.
@@ -116,8 +129,9 @@ public class RecipeStepDetailFragment extends Fragment {
             mPlayerView.setPlayer(mExoPlayer);
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(activity, "BakeItToMe");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+            MediaSource mediaSource = new ExtractorMediaSource(mUri, new DefaultDataSourceFactory(
                     activity, userAgent), new DefaultExtractorsFactory(), null, null);
+            if (mPosition != C.TIME_UNSET) mExoPlayer.seekTo(mPosition);
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
         }
@@ -130,9 +144,9 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
     }
 
     private void releasePlayer() {
@@ -143,9 +157,31 @@ public class RecipeStepDetailFragment extends Fragment {
             mExoPlayer = null;
         }
     }
+//https://stackoverflow.com/questions/45481775/exoplayer-restore-state-when-resumed/45482017#45482017
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mExoPlayer != null){
+            mPosition = mExoPlayer.getContentPosition();
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mUri != null){
+            initializePlayer();
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("step", mStep);
+        if(mExoPlayer != null){
+            outState.putLong("position", mPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
+
 }

@@ -33,6 +33,7 @@ public class RecipeStepListActivity extends AppCompatActivity
     private boolean mTwoPane;
     private List<Step> mStepList = null;
     private Recipe mRecipe;
+    private Step mStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class RecipeStepListActivity extends AppCompatActivity
         if(savedInstanceState != null){
             mRecipe = savedInstanceState.getParcelable("recipe");
             mStepList = mRecipe.getSteps();
+            mStep = savedInstanceState.getParcelable("step");
         }
 
         Intent intentThatStartedThisActivity = getIntent();
@@ -58,6 +60,9 @@ public class RecipeStepListActivity extends AppCompatActivity
             if(savedInstanceState == null){
                 UpdateStep(mStepList.get(0), true);
             }
+            else{
+                UpdateStep(mStep, false);
+            }
         }
         else{
             mTwoPane = false;
@@ -66,6 +71,7 @@ public class RecipeStepListActivity extends AppCompatActivity
     }
 
     private void UpdateStep(Step step, boolean firstTime){
+        mStep = step;
         RecipeStepDetailFragment detailFragment = new RecipeStepDetailFragment();
         detailFragment.SetStepDetails(step);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -125,5 +131,7 @@ public class RecipeStepListActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("recipe", mRecipe);
+        outState.putParcelable("step", mStep);
+        super.onSaveInstanceState(outState);
     }
 }

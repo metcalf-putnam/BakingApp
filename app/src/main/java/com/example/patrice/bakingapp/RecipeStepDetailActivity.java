@@ -1,5 +1,6 @@
 package com.example.patrice.bakingapp;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.Button;
 
 import com.example.patrice.bakingapp.model.Recipe;
 import com.example.patrice.bakingapp.model.Step;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 
 import java.util.List;
 
@@ -48,11 +50,6 @@ public class RecipeStepDetailActivity extends AppCompatActivity
             mTotalSteps = mStepList.size();
             mStep = mStepList.get(mStepNumber);
 
-            if(mIngredientView){
-                InitializeIngredients();
-            }else{
-                InitializeStep();
-            }
         }else {
             Intent intentThatStartedThisActivity = getIntent();
             if (intentThatStartedThisActivity != null) {
@@ -168,6 +165,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity
         outState.putParcelable("recipe", mRecipe);
         outState.putInt("step_num", mStepNumber);
         outState.putBoolean("ingredient_view", mIngredientView);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -198,4 +196,5 @@ public class RecipeStepDetailActivity extends AppCompatActivity
         }
         return intent;
     }
+
 }
