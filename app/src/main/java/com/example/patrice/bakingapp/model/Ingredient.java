@@ -3,8 +3,6 @@ package com.example.patrice.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.text.DecimalFormat;
-
 /**
  * Created by Patrice on 9/4/2017.
  */

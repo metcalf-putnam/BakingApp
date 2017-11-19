@@ -10,11 +10,10 @@ import android.widget.TextView;
 
 import com.example.patrice.bakingapp.model.Step;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Tegan on 11/4/2017.
+ * Created by Patrice on 11/4/2017.
  */
 
 public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepViewHolder> {
@@ -61,8 +60,8 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
         public StepViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            tv_step_number = (TextView) itemView.findViewById(R.id.tv_step_number);
-            tv_short_description = (TextView) itemView.findViewById(R.id.tv_step_text);
+            tv_step_number = itemView.findViewById(R.id.tv_step_number);
+            tv_short_description = itemView.findViewById(R.id.tv_step_text);
         }
         void bind(Step step){
             int id = step.getId();
@@ -85,7 +84,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
         notifyItemRangeInserted(0, steps.size());
         Log.d("steps", "Steps " +  steps.size());
     }
-    public void clearSteps(){
+    private void clearSteps(){
         if(mSteps != null){
             int currentSize =  mSteps.size();
             mSteps.clear();

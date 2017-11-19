@@ -1,25 +1,26 @@
 package com.example.patrice.bakingapp;
 
-import android.app.DownloadManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Build.VERSION_CODES;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.example.patrice.bakingapp.Utils.ParseRecipeJsonUtil;
-import com.example.patrice.bakingapp.model.Ingredient;
+import com.example.patrice.bakingapp.Utils.SimpleIdlingResource;
 import com.example.patrice.bakingapp.model.Recipe;
 
 import java.io.IOException;
@@ -36,31 +37,33 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity implements MainAdapter.RecipeClickListener{
-    private boolean mTablet;
+    private static final int DELAY_MILLIS = 1000;
     private ArrayList<Recipe> mRecipeList;
     private MainAdapter mAdapter;
     private final OkHttpClient client = new OkHttpClient();
-    private int WIDGETID;
     @BindView(R.id.rv_main_recipe_list) RecyclerView recipeList;
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+           // mIdlingResource.setIdleState(false);
+        }
+        return mIdlingResource;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        try {
-            fetchRecipes();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            WIDGETID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
 
         boolean tablet = getResources().getBoolean(R.bool.isTablet);
 
@@ -74,14 +77,27 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
         recipeList.setHasFixedSize(true);
         mAdapter = new MainAdapter(this);
         recipeList.setAdapter(mAdapter);
+        getIdlingResource();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            fetchRecipes();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /*
-    * "fetchRecipe" method asynchronously fetches data uses okhttp library
-    * Modified from https://github.com/square/okhttp/wiki/Recipes (async)
-    * */
-    public void fetchRecipes() throws Exception {
+        * "fetchRecipe" method asynchronously fetches data uses okhttp library
+        * Modified from https://github.com/square/okhttp/wiki/Recipes (async)
+        * */
+    private void fetchRecipes() throws Exception {
+        if (mIdlingResource != null) {
+            mIdlingResource.setIdleState(false);
+        }
         progressBar.setVisibility(View.VISIBLE);
         Request request = new Request.Builder()
                 .url("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json")
@@ -105,11 +121,24 @@ public class MainActivity extends AppCompatActivity implements MainAdapter.Recip
                         //System.out.println(responseBody.string());
                         mRecipeList = ParseRecipeJsonUtil.parseRecipes(responseBody.string());
                         mAdapter.setRecipes(mRecipeList);
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                        if (mIdlingResource != null) {
+                            mIdlingResource.setIdleState(true);
+                        }
+
+                        }
+                    }, DELAY_MILLIS);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             progressBar.setVisibility(View.GONE);
+
                         }
                     });
                 }

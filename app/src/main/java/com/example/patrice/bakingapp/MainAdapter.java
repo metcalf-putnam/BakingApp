@@ -13,11 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
- * Created by Tegan on 9/10/2017.
+ * Created by Patrice on 9/10/2017.
  */
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHolder> {
@@ -40,12 +37,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
         public RecipeViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            recipePhoto = (ImageView) itemView.findViewById(R.id.iv_recipe_photo);
-            recipeItemView = (TextView) itemView.findViewById(R.id.tv_recipe_card_title);
-            ingredient1_View = (TextView) itemView.findViewById(R.id.tv_ingredient1);
-            ingredient2_View = (TextView) itemView.findViewById(R.id.tv_ingredient2);
-            ingredient3_View = (TextView) itemView.findViewById(R.id.tv_ingredient3);
-            ingredient4_View = (TextView) itemView.findViewById(R.id.tv_ingredient4);
+            recipePhoto = itemView.findViewById(R.id.iv_recipe_photo);
+            recipeItemView = itemView.findViewById(R.id.tv_recipe_card_title);
+            ingredient1_View = itemView.findViewById(R.id.tv_ingredient1);
+            ingredient2_View = itemView.findViewById(R.id.tv_ingredient2);
+            ingredient3_View = itemView.findViewById(R.id.tv_ingredient3);
+            ingredient4_View = itemView.findViewById(R.id.tv_ingredient4);
         }
         void bind(Recipe recipe){
             String photoUrl = recipe.getImageUrl();
@@ -109,7 +106,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.RecipeViewHold
         notifyItemRangeInserted(0, recipes.size());
 
     }
-    public void clearRecipes(){
+    private void clearRecipes(){
         if(mRecipeList != null){
             int currentSize =  mRecipeList.size();
             mRecipeList.clear();

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Created by Tegan on 9/4/2017.
+ * Created by Patrice on 9/4/2017.
  */
 public class JsonParsingTest {
 
@@ -72,8 +72,4 @@ public class JsonParsingTest {
 
     }
 
-    @Test
-    public void ingredient_parse_isCorrect(){
-
-    }
 }

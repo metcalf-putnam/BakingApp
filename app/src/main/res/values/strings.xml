@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">Bake It to Me</string>
     <string name="title_recipestep_detail">RecipeStep Detail</string>
-    <string name="recipe_card_ellipses">...</string>
+    <string name="recipe_card_ellipses">…</string>
     <string name="ingredients_label">Ingredients</string>
     <string name="button_previous">Previous</string>
     <string name="button_next">Next</string>
-    <string name="button_back">Back</string>
 
     <string name="preview_recipe_name">Nutella Pie</string>
     <string name="preview_recipe_ingredient_1">Graham Cracker crumbs</string>
@@ -33,5 +32,9 @@
         Fold in the chocolate chips.</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <string name="cd_step_thumbnail">Recipe photo</string>
+    <string name="cd_ingredients_backdrop">Click for ingredient list</string>
+    <string name="cd_recipe_card">Recipe card</string>
 
 </resources>

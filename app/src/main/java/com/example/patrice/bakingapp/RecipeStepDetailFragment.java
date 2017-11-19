@@ -1,6 +1,5 @@
 package com.example.patrice.bakingapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.patrice.bakingapp.model.Step;
 import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -28,9 +25,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
-import java.net.URI;
-import java.util.List;
-
 /**
  * A fragment representing a single RecipeStep detail screen.
  * This fragment is either contained in a {@link RecipeStepListActivity}
@@ -42,9 +36,7 @@ public class RecipeStepDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
     private Step mStep;
-    private String mRecipeName;
     private SimpleExoPlayer mExoPlayer;
     private ImageView mThumbnail;
     private SimpleExoPlayerView mPlayerView;
@@ -69,7 +61,7 @@ public class RecipeStepDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_step_detail, container, false);
 
         mPlayerView = rootView.findViewById(R.id.playerView);
-        mThumbnail = rootView.findViewById(R.id.iv_step_thumnail);
+        mThumbnail = rootView.findViewById(R.id.iv_step_thumbnail);
 
 
         TextView tv_description = rootView.findViewById(R.id.tv_step_description);

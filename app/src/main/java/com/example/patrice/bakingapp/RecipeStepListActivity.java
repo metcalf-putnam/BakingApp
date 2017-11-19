@@ -3,26 +3,16 @@ package com.example.patrice.bakingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-
-import com.example.patrice.bakingapp.model.Ingredient;
 import com.example.patrice.bakingapp.model.Recipe;
 import com.example.patrice.bakingapp.model.Step;
 
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * An activity representing a list of RecipeSteps. This activity

@@ -16,7 +16,7 @@ import com.example.patrice.bakingapp.model.Recipe;
 import java.util.List;
 
 /**
- * Created by Tegan on 11/12/2017.
+ * Created by Patrice on 11/12/2017.
  */
 
 public class IngredientListFragment extends Fragment {

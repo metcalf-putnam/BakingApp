@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/iv_recipe_card"
+        android:contentDescription="@string/cd_recipe_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

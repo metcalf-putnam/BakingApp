@@ -14,8 +14,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static android.content.res.Resources.getSystem;
-
 /**
  * Created by Patrice on 9/4/2017.
  */
@@ -75,7 +73,7 @@ public final class ParseRecipeJsonUtil {
         return recipe;
     }
 
-    public static Recipe setSteps(Recipe recipe, JSONArray stepsIn){
+    private static Recipe setSteps(Recipe recipe, JSONArray stepsIn){
         try{
             for(int i = 0; i < stepsIn.length(); i++){
                 JSONObject stepObj = stepsIn.getJSONObject(i);

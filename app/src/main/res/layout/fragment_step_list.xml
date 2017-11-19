@@ -12,6 +12,7 @@
 
         <ImageView
             android:id="@+id/iv_spice_photo"
+            android:contentDescription="@string/cd_ingredients_backdrop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"

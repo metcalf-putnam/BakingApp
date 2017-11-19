@@ -12,7 +12,7 @@ import com.example.patrice.bakingapp.model.Ingredient;
 import java.util.List;
 
 /**
- * Created by Tegan on 11/12/2017.
+ * Created by Patrice on 11/12/2017.
  */
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder>{
     private List<Ingredient> mIngredientList;
@@ -24,9 +24,9 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
         public IngredientViewHolder(View view){
             super(view);
-            tv_name = (TextView) view.findViewById(R.id.tv_ingredient_name);
-            tv_quantity = (TextView) view.findViewById(R.id.tv_quantity);
-            tv_unit = (TextView) view.findViewById(R.id.tv_unit);
+            tv_name = view.findViewById(R.id.tv_ingredient_name);
+            tv_quantity = view.findViewById(R.id.tv_quantity);
+            tv_unit = view.findViewById(R.id.tv_unit);
         }
         void bind(Ingredient ingredient){
             tv_name.setText(ingredient.getDescription());
@@ -68,7 +68,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
         notifyItemRangeInserted(0, ingredients.size());
 
     }
-    public void clearRecipes(){
+    private void clearRecipes(){
         if(mIngredientList != null){
             int currentSize =  mIngredientList.size();
             mIngredientList.clear();

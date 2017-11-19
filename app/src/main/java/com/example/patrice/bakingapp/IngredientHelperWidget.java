@@ -20,7 +20,7 @@ import java.util.List;
 public class IngredientHelperWidget extends AppWidgetProvider {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, Recipe recipe) {
 
         // Construct the RemoteViews object
@@ -28,7 +28,7 @@ public class IngredientHelperWidget extends AppWidgetProvider {
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
-    public static void updateWidgets(Context context, AppWidgetManager appWidgetManager,
+    private static void updateWidgets(Context context, AppWidgetManager appWidgetManager,
                                      Recipe recipe, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId, recipe);

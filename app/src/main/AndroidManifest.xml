@@ -44,7 +44,11 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/ingredient_helper_widget_info" />
+                android:resource="@xml/ingredient_helper_widget_info"
+                android:minWidth="146.0dp"
+                android:minHeight="286.0dp"
+                android:minResizeWidth="146.0dp"
+                android:minResizeHeight="214.0dp"/>
         </receiver>
     </application>
 

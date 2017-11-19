@@ -2,7 +2,6 @@ package com.example.patrice.bakingapp;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.example.patrice.bakingapp.model.Recipe;
@@ -18,18 +16,16 @@ import com.example.patrice.bakingapp.model.Step;
 
 import java.util.List;
 
-import butterknife.OnClick;
-
 /**
- * Created by Tegan on 11/10/2017.
+ * Created by Patrice on 11/10/2017.
  */
 
 
 public class StepListFragment extends Fragment
     implements StepListAdapter.StepClickListener{
 
-    OnStepClickListener mCallback;
-    OnIngredientsClickListener mIngredientClickCallback;
+    private OnStepClickListener mCallback;
+    private OnIngredientsClickListener mIngredientClickCallback;
     private Recipe mRecipe;
 
     public interface StepProvider {
@@ -42,7 +38,7 @@ public class StepListFragment extends Fragment
         void OnIngredientsSelected(View view);
     }
 
-    class ImageClickListener implements View.OnClickListener{
+    private class ImageClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
             mIngredientClickCallback.OnIngredientsSelected(v);
