@@ -59,12 +59,14 @@ public class RecipeStepDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        if(mPosition == null) mPosition = C.TIME_UNSET;
+
+        //setRetainInstance(true);
+
         if(savedInstanceState != null){
             mStep = savedInstanceState.getParcelable("step");
             mPosition = savedInstanceState.getLong("position");
         }
+        if(mPosition == null) mPosition = C.TIME_UNSET;
     }
 
     @Override
@@ -178,9 +180,8 @@ public class RecipeStepDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("step", mStep);
-        if(mExoPlayer != null){
-            outState.putLong("position", mPosition);
-        }
+        outState.putLong("position", mPosition);
+
         super.onSaveInstanceState(outState);
     }
 
