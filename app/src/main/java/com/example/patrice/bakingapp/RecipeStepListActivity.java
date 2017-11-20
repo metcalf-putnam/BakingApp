@@ -3,6 +3,7 @@ package com.example.patrice.bakingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -54,16 +55,20 @@ public class RecipeStepListActivity extends AppCompatActivity
             }
         }
         setContentView(R.layout.activity_recipestep_list);
-        if (findViewById(R.id.recipestep_detail_container) != null) {
+        if (findViewById(R.id.recipestep_detail_container) != null && mStepList != null) {
             //recipestep_detail_container is only present in tablet devices
             mTwoPane = true;
-            if (savedInstanceState == null) {
+            if (mStep == null) {
                 UpdateStep(mStepList.get(0), true);
             } else {
                 UpdateStep(mStep, false);
             }
         } else {
             mTwoPane = false;
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.recipestep_detail_container);
+            if(fragment != null){
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
         }
 
     }

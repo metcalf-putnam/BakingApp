@@ -60,8 +60,6 @@ public class RecipeStepDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setRetainInstance(true);
-
         if (savedInstanceState != null) {
             mStep = savedInstanceState.getParcelable("step");
             mPosition = savedInstanceState.getLong("position");
@@ -72,34 +70,35 @@ public class RecipeStepDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_recipe_step_detail, container, false);
 
-        mPlayerView = rootView.findViewById(R.id.playerView);
-        mThumbnail = rootView.findViewById(R.id.iv_step_thumbnail);
+        releasePlayer();
 
+        if (mStep != null) {
 
-        TextView tv_description = rootView.findViewById(R.id.tv_step_description);
-        tv_description.setText(mStep.getDescription());
-        if (mExoPlayer != null) {
-            releasePlayer();
-        }
-        mUri = GrabVideoUri(mStep);
-        if (mUri != null) {
-            initializePlayer();
-            mPlayerView.setVisibility(View.VISIBLE);
-        } else {
-            mPlayerView.setVisibility(View.GONE);
-            String thumbnailUrl = mStep.getThumbnailUrl();
-            if (!thumbnailUrl.isEmpty()) {
-                int index = thumbnailUrl.lastIndexOf(".") + 1;
-                String extension = thumbnailUrl.substring(index);
-                if (extension.contentEquals("jpg") || extension.contentEquals("png")) {
-                    Picasso.with(getContext())
-                            .load(thumbnailUrl)
-                            .placeholder(R.drawable.cupcake_640)
-                            .error(R.drawable.ic_error)
-                            .into(mThumbnail);
+            mPlayerView = rootView.findViewById(R.id.playerView);
+            mThumbnail = rootView.findViewById(R.id.iv_step_thumbnail);
+
+            TextView tv_description = rootView.findViewById(R.id.tv_step_description);
+            tv_description.setText(mStep.getDescription());
+
+            mUri = GrabVideoUri(mStep);
+            if (mUri != null) {
+                initializePlayer();
+                mPlayerView.setVisibility(View.VISIBLE);
+            } else {
+                mPlayerView.setVisibility(View.GONE);
+                String thumbnailUrl = mStep.getThumbnailUrl();
+                if (!thumbnailUrl.isEmpty()) {
+                    int index = thumbnailUrl.lastIndexOf(".") + 1;
+                    String extension = thumbnailUrl.substring(index);
+                    if (extension.contentEquals("jpg") || extension.contentEquals("png")) {
+                        Picasso.with(getContext())
+                                .load(thumbnailUrl)
+                                .placeholder(R.drawable.cupcake_640)
+                                .error(R.drawable.ic_error)
+                                .into(mThumbnail);
+                    }
                 }
             }
         }

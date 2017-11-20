@@ -32,9 +32,6 @@ public class StepListFragment extends Fragment
     private LinearLayoutManager mLayoutManager;
     private List<Step> steps;
 
-    public StepListFragment() {
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
